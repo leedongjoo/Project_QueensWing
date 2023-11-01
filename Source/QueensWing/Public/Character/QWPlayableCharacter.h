@@ -21,10 +21,15 @@ public:
 	// Sets default values for this pawn's properties
 	AQWPlayableCharacter();
 	
+	virtual void PossessedBy(AController* NewController) override; // 빙의 진행 시 호출
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Collision")
 	TObjectPtr<UCameraComponent> DefaultCamera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Collision")
 	TObjectPtr<USpringArmComponent> SpringArm;
+
+private:
+	void InitAbilityActorInfo();
 };

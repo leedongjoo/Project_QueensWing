@@ -3,10 +3,12 @@
 
 #include "Character/QWPlayableCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/QWPlayerState.h"
 
 AQWPlayableCharacter::AQWPlayableCharacter()
 {
@@ -35,4 +37,21 @@ AQWPlayableCharacter::AQWPlayableCharacter()
 
 	DefaultCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("DefaultCamera"));
 	DefaultCamera->SetupAttachment(SpringArm);
+}
+
+void AQWPlayableCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// 폰에 빙의 시 PlayerState의 Ability 관련 변수들을 초기화, 캐릭터의 변수에 할당.
+	InitAbilityActorInfo();
+}
+
+void AQWPlayableCharacter::InitAbilityActorInfo()
+{
+	AQWPlayerState* QWPlayerState = CastChecked<AQWPlayerState>(GetPlayerState());
+	QWPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(QWPlayerState, this); // 어빌리티 초기화
+	
+	AbilitySystemComponent = QWPlayerState->GetAbilitySystemComponent();
+	AttributeSet = QWPlayerState->GetAttributeSet();
 }

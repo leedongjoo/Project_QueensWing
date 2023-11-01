@@ -8,7 +8,7 @@
 
 class UQWWeaponDataAsset;
 
-UCLASS()
+UCLASS(Abstract)
 class QUEENSWING_API AQWWeaponBase : public AActor
 {
 	GENERATED_BODY()
