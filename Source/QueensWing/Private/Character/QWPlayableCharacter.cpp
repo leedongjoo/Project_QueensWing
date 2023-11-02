@@ -8,7 +8,9 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/QWPlayerController.h"
 #include "Player/QWPlayerState.h"
+#include "UI/HUD/QWHUD.h"
 
 AQWPlayableCharacter::AQWPlayableCharacter()
 {
@@ -42,8 +44,7 @@ AQWPlayableCharacter::AQWPlayableCharacter()
 void AQWPlayableCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	// 폰에 빙의 시 PlayerState의 Ability 관련 변수들을 초기화, 캐릭터의 변수에 할당.
+	
 	InitAbilityActorInfo();
 }
 
@@ -54,4 +55,12 @@ void AQWPlayableCharacter::InitAbilityActorInfo()
 	
 	AbilitySystemComponent = QWPlayerState->GetAbilitySystemComponent();
 	AttributeSet = QWPlayerState->GetAttributeSet();
+
+	if (AQWPlayerController* QWPlayerController = Cast<AQWPlayerController>(GetController()))
+	{
+		if(AQWHUD* QWHUD = Cast<AQWHUD>(QWPlayerController->GetHUD()))
+		{
+			QWHUD->InitOverlay(QWPlayerController, QWPlayerState, AbilitySystemComponent, AttributeSet); // UI를 띄운다
+		}
+	}
 }
